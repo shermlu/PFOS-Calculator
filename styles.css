@@ -1,0 +1,16 @@
+html {
+  font-size: 18px;
+}
+body {
+  font-size: 100%;
+}
+h2 {
+  font-size: 150%;
+}
+canvas{
+	width: 800px !important;
+	height: 400px !important;
+}
+footer {
+	font-size: 80%;
+}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Serum PFOS Calculator | UC Irvine</title>
+    <h2>Serum PFOS Calculator for Adults</h2>
+  </head>
+  <body>
+    <script></script>
+    <noscript><B>JavaScript is off or not installed for this
+    browser. This calculator requires JavaScript.</B><BR><BR></noscript>
+    <B>
+      Please enter the following values, then click on the "submit" button:
+    </B>
+
+    <P>
+      <B>
+        1. How much PFOS was in your blood sample? (7 is a typical value for an adult with no PFOS in his or her water.) 
+      </B>
+      <BR>
+      Starting serum PFOS concentration (&mu;g/L, ng/mL, or ppb)
+      <input id="startserum" size="5">
+    </P>
+    <P>
+      <B>
+        2. How much PFOS is in your drinking water? Enter 0 if you're drinking only bottled water, carbon-filtered water, or water treated by reverse osmosis.
+      </B>
+      <BR>
+      Water PFOS concentration for ongoing consumption (ng/L, or ppt) <input id="waterconc" size="5">
+    </P>
+    <button type="button" onclick="ToggleAdv()"><I>Advanced options</I></button>
+    <div id="advanced" style="display: none;">
+      <P>
+      Serum PFOS contribution from other ongoing exposures (ng/mL) <input
+      id='otherserum' value='7.07' size='5'>
+      <BR>Half-life of PFOS in serum (years) <input id='halflife' value='3.4' size='5'>
+      <BR>Steady-state ratio for serum:water concentrations (unitless) <input id='ssratio' value='101.265' size='5'>
+      </P>
+    </div>
+    <button type="button" name = "submitButton" onclick="myFunction()"><B>Submit</B></button>
+    <p id="results"></p>
+    <div class="card">
+      <div class = "card-body" style = "width: 800px; height: 400px;">
+        <canvas id="myChart"></canvas> 
+      </div>
+    </div>
+  </body>
+
+  <HR>
+  Calculator Version 0.9 by <A HREF="http://www.faculty.uci.edu/profile.cfm?faculty_id=5377"> Scott Bartell, PhD </A>.  
+  <p>
+    <footer>
+      THIS WEBSITE IS NOT INTENDED FOR THE PURPOSE OF PROVIDING MEDICAL ADVICE.  
+      All content is for informational purposes only and is not intended to serve as a substitute for the consultation, diagnosis, and/or medical treatment of a qualified physician or healthcare provider. Calculations are based on average values for adults (ages 20 and over); individual results may vary due to individual differences in water consumption, PFOS excretion, and exposures from other sources. Model assumptions and defaults: one compartment pharmacokinetic model with 3.4 year serum half-life (<A HREF="https://www.ncbi.nlm.nih.gov/pubmed/29133598">Li Y et al., 2018</A>); 101.26 steady-state serum:water concentration ratio (<A HREF="http://ehp.niehs.nih.gov/1002503/">Hoffman et al., 2011</A>); 7.07 ng/mL serum contribution from other ongoing exposure sources (<A HREF="https://www.cdc.gov/exposurereport/">CDC, 2015</A>).        
+    </footer>
+  </p>
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js" type="text/javascript"></script>
+  <script>
+  ToggleAdv = function() {
+    extrastuff = document.getElementById('advanced');
+    var isHidden = extrastuff.style.display == 'none';
+    extrastuff.style.display = isHidden ? 'block' : 'none';
+  };
+
+  function myFunction() {
+    var ctx = document.getElementById("myChart");
+    C0 = Number(document.getElementById("startserum").value); //Co
+    Cw = Number(document.getElementById("waterconc").value); //W
+    Cother = Number(document.getElementById("otherserum").value); //Background = 7.07 ng/L
+    hl = Number(document.getElementById("halflife").value); //t_1/2
+    ss = Number(document.getElementById("ssratio").value); //Sw = ing_rate/kv
+    //ing_rate = 13 mL/kg-day, assume 80 kg on average
+    //k = ln(2)/half_life = ln(2)/3.4 years
+    //v = vol. of dist. = 0.23 L/kg = 230 mL/kg
+    //Sw = ((13*80*365.25)/1000) * (3.4/ln(2)) * (1/(0.23*80)) = 101.265
+    tend = 25;
+    points = [];
+    x_axis = [];
+    k = (Math.log(2)/hl)
+    kv = k*230;
+    Cinf = Cother + (Cw*ss/1000);
+    for (i = 1; i <= tend; i++){
+      Ct = Cinf + (C0 -Cinf)*Math.exp(-k*i);
+      x_axis.push(i);
+      points.push(Math.round(100*Ct)/100);
+    }
+    if (isNaN(C0) || C0 < 0 || isNaN(Cw) || Cw < 0 || isNaN(hl) || hl < 0 || 
+      isNaN(Cother) || Cother < 0 || isNaN(ss) || ss < 0) {
+      alert("Please enter only non-negative numbers");
+      document.getElementById('chart_div').style.visibility ='hidden';
+      document.getElementById("chart_div").style.height = "0px";
+      output = "";
+    } else {
+      if (Cother > C0 + 0.1) {
+        alert("Starting serum PFOA concentration is lower than assumed contribution from other sources; calculations may not be accurate for that situation.")
+      }
+      var myChart = new Chart(document.getElementById("myChart").getContext('2d'), {
+          type: 'line',
+          data: {
+              labels: x_axis,
+              datasets: [{
+                  data: points,
+                  borderColor: "#3e95cd",
+                  fill: false,
+              }]
+          },
+          options: {
+            scales: {
+              xAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: "Time (years)"
+                }
+              }],
+              yAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: "Serum PFOS (ng/ml)"
+                }
+              }]
+            },
+            legend: {
+              display: false
+            },
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+
+      output = "Starting serum PFOS concentration: " + C0 + " ng/mL <BR>" +
+      "Water PFOS concentration: " + Cw + " ppt <BR>" +
+      "Serum PFOS contribution from other ongoing exposures: " + Cother + " ng/mL <BR>" +
+      "Half-life of PFOS in serum: " + hl + " years <BR>" +
+      "Steady-state ratio for serum:water concentrations: " + ss + "<BR>" +
+            "Predicted steady-state serum PFOS concentration: " + (Math.round(100*Cinf)/100) + " ng/mL";
+      document.getElementById("results").innerHTML = output;
+    }
+  };
+  </script>
+</html>
