@@ -32,9 +32,9 @@
     <button type="button" onclick="ToggleAdv()"><I>Advanced options</I></button>
     <div id="advanced" style="display: none;">
       <P>
-      Serum PFOS contribution from other ongoing exposures (ng/mL) <input
-      id='otherserum' value='7.07' size='5'>
+      Serum PFOS contribution from other ongoing exposures (ng/mL) <input id='otherserum' value='7.07' size='5'>
       <BR>Half-life of PFOS in serum (years) <input id='halflife' value='3.4' size='5'>
+      <BR>Body Mass (kg) <input id='weight' value = '80' size='5'>
       <BR>Steady-state ratio for serum:water concentrations (unitless) <input id='ssratio' value='101.265' size='5'>
       </P>
     </div>
@@ -48,7 +48,7 @@
   </body>
 
   <HR>
-  Calculator Version 0.9 by <A HREF="http://www.faculty.uci.edu/profile.cfm?faculty_id=5377"> Scott Bartell, PhD </A>.  
+  Calculator Version 0.9 by Sherman Lu, <A HREF="http://www.faculty.uci.edu/profile.cfm?faculty_id=5377"> Scott Bartell, PhD </A>.  
   <p>
     <footer>
       THIS WEBSITE IS NOT INTENDED FOR THE PURPOSE OF PROVIDING MEDICAL ADVICE.  
@@ -71,11 +71,13 @@
     Cw = Number(document.getElementById("waterconc").value); //W
     Cother = Number(document.getElementById("otherserum").value); //Background = 7.07 ng/L
     hl = Number(document.getElementById("halflife").value); //t_1/2
-    ss = Number(document.getElementById("ssratio").value); //Sw = ing_rate/kv
+    //ss = Number(document.getElementById("ssratio").value); //Sw = ing_rate/kv
+    w = Number(document.getElementById("weight").value);
+    ss = ((13*w*365.25)/1000) * (3.4/Math.log(2)) * (1/(0.23*w));
     //ing_rate = 13 mL/kg-day, assume 80 kg on average
     //k = ln(2)/half_life = ln(2)/3.4 years
     //v = vol. of dist. = 0.23 L/kg = 230 mL/kg
-    //Sw = ((13*80*365.25)/1000) * (3.4/ln(2)) * (1/(0.23*80)) = 101.265
+    //Sw = ((13*(80kg)*365.25)/1000) * (3.4/ln(2)) * (1/(0.23*80)) = 101.265
     tend = 25;
     points = [];
     x_axis = [];
@@ -85,7 +87,7 @@
     for (i = 1; i <= tend; i++){
       Ct = Cinf + (C0 -Cinf)*Math.exp(-k*i);
       x_axis.push(i);
-      points.push(Math.round(100*Ct)/100);
+      points.push(Ct);
     }
     if (isNaN(C0) || C0 < 0 || isNaN(Cw) || Cw < 0 || isNaN(hl) || hl < 0 || 
       isNaN(Cother) || Cother < 0 || isNaN(ss) || ss < 0) {
@@ -134,7 +136,8 @@
       "Water PFOS concentration: " + Cw + " ppt <BR>" +
       "Serum PFOS contribution from other ongoing exposures: " + Cother + " ng/mL <BR>" +
       "Half-life of PFOS in serum: " + hl + " years <BR>" +
-      "Steady-state ratio for serum:water concentrations: " + ss + "<BR>" +
+      "Weight of Subject: " + w + " kg <BR>" +
+      "Steady-state ratio for serum:water concentrations: " + (Math.round(100*ss)/100) + "<BR>" +
             "Predicted steady-state serum PFOS concentration: " + (Math.round(100*Cinf)/100) + " ng/mL";
       document.getElementById("results").innerHTML = output;
     }
