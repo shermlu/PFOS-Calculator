@@ -1,11 +1,15 @@
 html {
-  font-size: 18px;
+	font-size: 18px;
 }
 body {
-  font-size: 100%;
+	font-size: 100%;
 }
 h2 {
-  font-size: 150%;
+	font-size: 150%;
+}
+main {
+	font-size: 100%;
+	font-weight: bold;
 }
 canvas{
 	width: 800px !important;
@@ -13,4 +17,8 @@ canvas{
 }
 footer {
 	font-size: 80%;
+}
+
+table, tr, td {
+	border-collapse: collapse;
 }

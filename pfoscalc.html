@@ -14,28 +14,78 @@
       Please enter the following values, then click on the "submit" button:
     </B>
 
+    <table style="width:50%" border="1">
+      <tr>
+        <td> 
+          <strong>Chemical</strong> 
+        </td>
+        <td> 
+          <strong>Typical concentration for an adult with no exposure from water (&mu;g/L, ng/mL, or ppb) </strong> 
+        </td>
+        <td> 
+          <strong>Contribution from other sources (ng/ml)</strong>
+        </td>
+      </tr>
+      <tr>
+        <td> PFOA </td>
+        <td> 2 </td>
+        <td> 2.08 </td>
+      </tr>
+      <tr>
+        <td> PFOS </td>
+        <td> 7 </td>
+        <td> 7.07 </td>
+      </tr>
+      <tr>
+        <td> *** </td>
+        <td> *****  </td>
+        <td> ***** </td>
+      </tr>
+      <tr>
+        <td> *** </td>
+        <td> *****  </td>
+        <td> ***** </td>
+      </tr>
+    </table>
+
+    <select type="text" id="menu" onchange = "changeText()">
+      <option value="PFOS">PFOS</option>
+      <option value="PFOA">PFOA</option>
+      <option value="**">**</option>
+      <option value="***">***</option>
+    </select>
+
     <P>
-      <B>
-        1. How much PFOS was in your blood sample? (7 is a typical value for an adult with no PFOS in his or her water.) 
-      </B>
-      <BR>
-      Starting serum PFOS concentration (&mu;g/L, ng/mL, or ppb)
+      <main id="q1">
+          1. How much PFOS was in your blood sample? (7 is a typical value for an adult with no PFOS in his or her water.) 
+      </main>
+      <aside style='display:inline-block' id="serumConc">
+        Starting serum PFOS concentration (&mu;g/L, ng/mL, or ppb) 
+      </aside>
       <input id="startserum" size="5">
     </P>
     <P>
-      <B>
+      <main id="q2">
         2. How much PFOS is in your drinking water? Enter 0 if you're drinking only bottled water, carbon-filtered water, or water treated by reverse osmosis.
-      </B>
-      <BR>
-      Water PFOS concentration for ongoing consumption (ng/L, or ppt) <input id="waterconc" size="5">
+      </main>
+      <aside style='display:inline-block' id="waterConc">
+        Water PFOS concentration for ongoing consumption (ng/L, or ppt)
+      </aside>
+      <input id="waterconc" size="5">
     </P>
     <button type="button" onclick="ToggleAdv()"><I>Advanced options</I></button>
     <div id="advanced" style="display: none;">
       <P>
-      Serum PFOS contribution from other ongoing exposures (ng/mL) <input id='otherserum' value='7.07' size='5'>
-      <BR>Half-life of PFOS in serum (years) <input id='halflife' value='3.4' size='5'>
-      <BR>Body Mass (kg) <input id='weight' value = '80' size='5'>
-      <BR>Steady-state ratio for serum:water concentrations (unitless) <input id='ssratio' value='101.265' size='5'>
+        <aside style='display:inline-block' id="ao1">
+          Serum PFOS contribution from other ongoing exposures (ng/mL) 
+        </aside>
+        <input id='otherserum' value='7.07' size='5'>
+        <aside style='display:inline-block' id="ao2">
+          Half-life of PFOS in serum (years) 
+        </aside>
+        <input id='halflife' type='text' value='3.4' size='5'>
+        <BR> Body Mass (kg) <input id='weight' value = '80' size='5'>
+        <BR>Steady-state ratio for serum:water concentrations (unitless) <input id='ssratio' value='101.265' size='5'>
       </P>
     </div>
     <button type="button" name = "submitButton" onclick="myFunction()"><B>Submit</B></button>
@@ -63,6 +113,42 @@
     extrastuff = document.getElementById('advanced');
     var isHidden = extrastuff.style.display == 'none';
     extrastuff.style.display = isHidden ? 'block' : 'none';
+  };
+
+  function changeText() {
+        if (document.getElementById("menu").value == "PFOS") {
+          document.getElementById("q1").innerHTML = 
+            "1. How much PFOS was in your blood sample? (7 is a typical value for an adult with no PFOS in his or her water.) ";
+          document.getElementById("serumConc").innerHTML = 
+            "Starting serum PFOS concentration (&mu;g/L, ng/mL, or ppb) ";
+          document.getElementById("q2").innerHTML = 
+            "2. How much PFOS is in your drinking water? Enter 0 if you're drinking only bottled water, carbon-filtered water, or water treated by reverse osmosis.";
+          document.getElementById("waterConc").innerHTML = 
+            "Water PFOS concentration for ongoing consumption (ng/L, or ppt) ";
+          document.getElementById("ao1").innerHTML = 
+            "Serum PFOS contribution from other ongoing exposures (ng/mL)";
+          document.getElementById("otherserum").value = "7.07";
+          document.getElementById("ao2").innerHTML = "Half-life of PFOS in serum (years)";
+          document.getElementById("halflife").value = "3.4";
+        } else if (document.getElementById("menu").value == "PFOA") {
+          document.getElementById("q1").innerHTML = 
+            "1. How much PFOA was in your blood sample? (2 is a typical value for an adult with no PFOS in his or her water.) ";
+          document.getElementById("serumConc").innerHTML = 
+            "Starting serum PFOA concentration (&mu;g/L, ng/mL, or ppb) ";
+          document.getElementById("q2").innerHTML = 
+            "2. How much PFOA is in your drinking water? Enter 0 if you're drinking only bottled water, carbon-filtered water, or water treated by reverse osmosis.";
+          document.getElementById("waterConc").innerHTML = 
+            "Water PFOA concentration for ongoing consumption (ng/L, or ppt) ";
+          document.getElementById("ao1").innerHTML = 
+            "Serum PFOA contribution from other ongoing exposures (ng/mL)";
+          document.getElementById("otherserum").value = "2.08";
+          document.getElementById("ao2").innerHTML = "Half-life of PFOA in serum (years)";
+          document.getElementById("halflife").value = "2.3";
+        } else if (document.getElementById("menu").value == "**") {
+            document.getElementById("divText").innerHTML = "[HEADER] ...";
+        } else if (document.getElementById("menu").value == "***") {
+            document.getElementById("divText").innerHTML = "NOTE [DATE] ...";
+        }
   };
 
   function myFunction() {
