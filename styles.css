@@ -19,6 +19,8 @@ footer {
 	font-size: 80%;
 }
 
-table, tr, td {
+table, th, td {
 	border-collapse: collapse;
+	border: 1px solid black;
+	font-size:80%;
 }
