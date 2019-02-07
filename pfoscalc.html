@@ -80,7 +80,7 @@
   <p>
     <footer>
       THIS WEBSITE IS NOT INTENDED FOR THE PURPOSE OF PROVIDING MEDICAL ADVICE.  
-      All content is for informational purposes only and is not intended to serve as a substitute for the consultation, diagnosis, and/or medical treatment of a qualified physician or healthcare provider. Calculations are based on average values for adults (ages 20 and over); individual results may vary due to individual differences in water consumption, PFOS excretion, and exposures from other sources. All moodels assume a 13 mL/kg-day water ingestion rate (<A HREF="http://ofmpub.epa.gov/eims/eimscomm.getfile?p_download_id=526163">U.S. EPA. Exposure Factors Handbook 2011 Edition (Final Report), 2011</A>). Model specific assumptions and defaults:    
+      All content is for informational purposes only and is not intended to serve as a substitute for the consultation, diagnosis, and/or medical treatment of a qualified physician or healthcare provider. Calculations are based on average values for adults (ages 20 and over); individual results may vary due to individual differences in water consumption, excretion of chemicals, and exposures from other sources. All moodels assume a 13 mL/kg-day water ingestion rate (<A HREF="http://ofmpub.epa.gov/eims/eimscomm.getfile?p_download_id=526163">U.S. EPA. Exposure Factors Handbook 2011 Edition (Final Report), 2011</A>). Model specific assumptions and defaults:    
     </footer>
     <table border="1">
       <tr>
@@ -111,15 +111,15 @@
       </tr>
       <tr>
         <td> PFHxS </td>
-        <td> *****  </td>
+        <td> 0.287?, ATSDR A-4 </td>
         <td> 1.28, (<A HREF="https://www.cdc.gov/exposurereport/">CDC, 2015</A>)</td>
-        <td> ***** </td>
+        <td> 8.5, Olsen et al, 2007a (ATSDR A-4)</td>
       </tr>
       <tr>
         <td> PFNA </td>
-        <td> *****  </td>
+        <td> 0.2, ATSDR A-4 </td>
         <td> 0.89, (<A HREF="https://www.cdc.gov/exposurereport/">CDC, 2015</A>) </td>
-        <td> ***** </td>
+        <td> 2.46, ATSDR A-4 </td>
       </tr>
     </table>
   </p>
@@ -139,8 +139,8 @@
     var defaults = {
       PFOS: {start: 7, bckgnd: 7.07, hl: 3.4, vd: 0.23},
       PFOA: {start: 2, bckgnd: 2.16, hl: 2.3, vd: 0.17},
-      PFHxS: {start: 000, bckgnd: 000, hl: 000, vd: 000},
-      PFNA: {start: 000, bckgnd: 000, hl: 000, vd: 000}
+      PFHxS: {start: 1, bckgnd: 1.28, hl: 8.5, vd: 0.287},
+      PFNA: {start: 0.9, bckgnd: 0.89, hl: 2.46, vd: 0.2}
     };
     var chemical = document.getElementById("menu").value;
     document.getElementById("q1").innerHTML = 
