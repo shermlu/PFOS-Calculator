@@ -3,8 +3,8 @@
   <head>
     <link rel="stylesheet" href="styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Serum PFOS Calculator | UC Irvine</title>
-    <h2>Serum PFOS Calculator for Adults</h2>
+    <title>Serum PFAS Calculator | UC Irvine</title>
+    <h2>Serum PFAS Calculator for Adults</h2>
   </head>
   <body>
     <noscript>
@@ -28,8 +28,28 @@
     </P>
 
     <P>
+      <main style='display:inline-block'> 
+      2. What is the subject's gender (only applies to PFHxS and PFNA): 
+      </main>
+      <select type="text" id="genMenu" onchange = "changeText()">
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+    </P>
+
+    <P>
+      <main style='display:inline-block'> 
+      3. Is the subject older than 50 years old? (only applies to PFNA): 
+      </main>
+      <select type="text" id="ageMenu" onchange = "changeText()">
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+    </P>
+
+    <P>
       <main id="q1">
-          2. How much PFOS was in your blood sample? (7 is a typical value for an adult with no PFOS in his or her water.) 
+          4. How much PFOS was in your blood sample? (7 is a typical value for an adult with no PFOS in his or her water.) 
       </main>
       <aside style='display:inline-block' id="serumConc">
         Starting serum PFOS concentration (&mu;g/L, ng/mL, or ppb) 
@@ -38,7 +58,7 @@
     </P>
     <P>
       <main id="q2">
-        3. How much PFOS is in your drinking water? Enter 0 if you're drinking only bottled water, carbon-filtered water, or water treated by reverse osmosis.
+        5. How much PFOS is in your drinking water? Enter 0 if you're drinking only bottled water, carbon-filtered water, or water treated by reverse osmosis.
       </main>
       <aside style='display:inline-block' id="waterConc">
         Water PFOS concentration for ongoing consumption (ng/L, or ppt)
@@ -67,7 +87,6 @@
           Body Mass (kg) 
         </aside>
         <input id='weight' value = '80' size='5'>
-        <!-- <BR>Steady-state ratio for serum:water concentrations (unitless) <input id='ssratio' value='101.265' size='5'> -->
       </P>
     </div>
     <button type="button" name = "submitButton" onclick="myFunction()"><B>Submit</B></button>
@@ -99,27 +118,27 @@
       </tr>
       <tr>
         <td> PFOS </td>
-        <td> 0.23, EPA Health Affects Support Document for PFOS, 2-24 (or US EPA 2016c from MN) </td>
+        <td> 0.23, (<A HREF="https://www.epa.gov/sites/production/files/2016-05/documents/hesd_pfos_final-plain.pdf">EPA Health Effects Support Document for PFOS, 2-24</A>)</td>
         <td> 7.07, (<A HREF="https://www.cdc.gov/exposurereport/">CDC, 2015</A>)</td>
         <td> 3.4, (<A HREF="https://www.ncbi.nlm.nih.gov/pubmed/29133598">Li Y et al., 2018</A>)</td>
       </tr>
       <tr>
         <td> PFOA</td>
-        <td> 0.17, EPA Health Affects Support Document for PFOA, 2-51 (or US EPA 2016a from MN)</td>
+        <td> 0.17, (<A HREF="https://www.epa.gov/sites/production/files/2016-05/documents/pfoa_hesd_final-plain.pdf">EPA Health Effects Support Document for PFOA, 2-51</A>)</td>
         <td> 2.16, (<A HREF="https://www.cdc.gov/exposurereport/">CDC, 2015</A>)</td>
         <td> 2.3, (<A HREF="http://ehp.niehs.nih.gov/0901252/">Bartell et al., 2010</A>)</td>
       </tr>
       <tr>
         <td> PFHxS </td>
-        <td> 0.287?, ATSDR A-4 </td>
+        <td> 0.287 for males, 0.213 for females, (<A HREF="https://www.atsdr.cdc.gov/toxprofiles/tp200.pdf">ATSDR A-4</A>) </td>
         <td> 1.28, (<A HREF="https://www.cdc.gov/exposurereport/">CDC, 2015</A>)</td>
-        <td> 8.5, Olsen et al, 2007a (ATSDR A-4)</td>
+        <td> 8.5, (<A HREF="https://www.atsdr.cdc.gov/toxprofiles/tp200.pdf">ATSDR A-4</A>)</td>
       </tr>
       <tr>
         <td> PFNA </td>
-        <td> 0.2, ATSDR A-4 </td>
+        <td> 0.2, (<A HREF="https://www.atsdr.cdc.gov/toxprofiles/tp200.pdf">ATSDR A-4</A>) </td>
         <td> 0.89, (<A HREF="https://www.cdc.gov/exposurereport/">CDC, 2015</A>) </td>
-        <td> 2.46, ATSDR A-4 </td>
+        <td> 2.5 for females younger than 50 years, 4.3 for everyone else, (<A HREF="https://www.atsdr.cdc.gov/toxprofiles/tp200.pdf">ATSDR A-4</A>) </td>
       </tr>
     </table>
   </p>
@@ -139,22 +158,38 @@
     var defaults = {
       PFOS: {start: 7, bckgnd: 7.07, hl: 3.4, vd: 0.23},
       PFOA: {start: 2, bckgnd: 2.16, hl: 2.3, vd: 0.17},
-      PFHxS: {start: 1, bckgnd: 1.28, hl: 8.5, vd: 0.287},
-      PFNA: {start: 0.9, bckgnd: 0.89, hl: 2.46, vd: 0.2}
+      PFHxS: {start: 1, bckgnd: 1.28, hl: 8.5, vd: 0},
+      PFNA: {start: 0.9, bckgnd: 0.89, hl: 0, vd: 0.2}
     };
     var chemical = document.getElementById("menu").value;
+    if (chemical == "PFHxS"){
+      if (document.getElementById("genMenu").value == "Male"){
+        document.getElementById("vd").value = 0.287;
+      } else {
+        document.getElementById("vd").value = 0.213;
+      }
+      document.getElementById("halflife").value = defaults[chemical].hl;
+    } else if (chemical == "PFNA"){
+      document.getElementById("halflife").value = 4.3;
+      if (document.getElementById("genMenu").value == "Female"){
+        if (document.getElementById("ageMenu").value == "No"){
+          document.getElementById("halflife").value = 2.5;
+        }
+      }
+    } else {
+      document.getElementById("vd").value = defaults[chemical].vd;
+      document.getElementById("halflife").value = defaults[chemical].hl;
+    }
     document.getElementById("q1").innerHTML = 
-      "1. How much " + chemical + " was in your blood sample? (" + defaults[chemical].start + " is a typical value for an adult with no " + chemical + " in his or her water.) ";
+      "4. How much " + chemical + " was in your blood sample? (" + defaults[chemical].start + " is a typical value for an adult with no " + chemical + " in his or her water.) ";
     document.getElementById("serumConc").innerHTML = "Starting serum " + chemical + " concentration (&mu;g/L, ng/mL, or ppb) ";
     document.getElementById("q2").innerHTML = 
-      "2. How much " + chemical + " is in your drinking water? Enter 0 if you're drinking only bottled water, carbon-filtered water, or water treated by reverse osmosis.";
+      "5. How much " + chemical + " is in your drinking water? Enter 0 if you're drinking only bottled water, carbon-filtered water, or water treated by reverse osmosis.";
     document.getElementById("waterConc").innerHTML =  "Water " + chemical + " concentration for ongoing consumption (ng/L, or ppt) ";
     document.getElementById("ao1").innerHTML = "Serum " + chemical + " contribution from other ongoing exposures (ng/mL)";
     document.getElementById("otherserum").value = defaults[chemical].bckgnd;
     document.getElementById("ao2").innerHTML = "Half-life of " + chemical + " in serum (years)";
-    document.getElementById("halflife").value = defaults[chemical].hl;
     document.getElementById("ao3").innerHTML = "Volume of distribution for " + chemical + " (L/kg)";
-    document.getElementById("vd").value = defaults[chemical].vd;
   };
 
   function myFunction() {
@@ -203,8 +238,8 @@
         chartArea: {
           left:100
         },
-        width: 600,
-        height: 300,
+        width: 800,
+        height: 400,
         curveType: 'function',
         hAxis: {
           title: 'Time (years)',
@@ -221,7 +256,7 @@
       for (i = 0; i < x_axis.length; i++){
         data.addRow([x_axis[i], points[i]]);
       };
-      document.getElementById("chart_div").style = "height:300px; width:600px";
+      document.getElementById("chart_div").style = "height:400px; width:800px";
       var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
       chart.draw(data, options);
 
