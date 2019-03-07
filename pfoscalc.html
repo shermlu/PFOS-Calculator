@@ -119,25 +119,25 @@
       <tr>
         <td> PFOS </td>
         <td> 0.23, (<A HREF="https://www.epa.gov/sites/production/files/2016-05/documents/hesd_pfos_final-plain.pdf">EPA Health Effects Support Document for PFOS, 2-24</A>)</td>
-        <td> 7.07, (<A HREF="https://www.cdc.gov/exposurereport/">CDC, 2015</A>)</td>
-        <td> 3.4, (<A HREF="https://www.ncbi.nlm.nih.gov/pubmed/29133598">Li Y et al., 2018</A>)</td>
+        <td> 7.07, (<A HREF="https://www.cdc.gov/exposurereport/">CDC 2015</A>)</td>
+        <td> 3.4, (<A HREF="https://www.ncbi.nlm.nih.gov/pubmed/29133598">Li Y et al. 2018</A>)</td>
       </tr>
       <tr>
         <td> PFOA</td>
         <td> 0.17, (<A HREF="https://www.epa.gov/sites/production/files/2016-05/documents/pfoa_hesd_final-plain.pdf">EPA Health Effects Support Document for PFOA, 2-51</A>)</td>
-        <td> 2.16, (<A HREF="https://www.cdc.gov/exposurereport/">CDC, 2015</A>)</td>
-        <td> 2.3, (<A HREF="http://ehp.niehs.nih.gov/0901252/">Bartell et al., 2010</A>)</td>
+        <td> 2.16, (<A HREF="https://www.cdc.gov/exposurereport/">CDC 2015</A>)</td>
+        <td> 2.3, (<A HREF="http://ehp.niehs.nih.gov/0901252/">Bartell et al. 2010</A>)</td>
       </tr>
       <tr>
         <td> PFHxS </td>
         <td> 0.287 for males, 0.213 for females, (<A HREF="https://www.atsdr.cdc.gov/toxprofiles/tp200.pdf">ATSDR A-4</A>) </td>
-        <td> 1.28, (<A HREF="https://www.cdc.gov/exposurereport/">CDC, 2015</A>)</td>
+        <td> 1.28, (<A HREF="https://www.cdc.gov/exposurereport/">CDC 2015</A>)</td>
         <td> 8.5, (<A HREF="https://www.atsdr.cdc.gov/toxprofiles/tp200.pdf">ATSDR A-4</A>)</td>
       </tr>
       <tr>
         <td> PFNA </td>
         <td> 0.2, (<A HREF="https://www.atsdr.cdc.gov/toxprofiles/tp200.pdf">ATSDR A-4</A>) </td>
-        <td> 0.89, (<A HREF="https://www.cdc.gov/exposurereport/">CDC, 2015</A>) </td>
+        <td> 0.89, (<A HREF="https://www.cdc.gov/exposurereport/">CDC 2015</A>) </td>
         <td> 2.5 for females younger than 50 years, 4.3 for everyone else, (<A HREF="https://www.atsdr.cdc.gov/toxprofiles/tp200.pdf">ATSDR A-4</A>) </td>
       </tr>
     </table>
@@ -260,7 +260,9 @@
       var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
       chart.draw(data, options);
 
-      output = "Starting serum " + chemical + " concentration: " + C0 + " ng/mL <BR>" +
+      output = "Gender: " + document.getElementById("genMenu").value + 
+        "<BR>Older than 50: " + document.getElementById("ageMenu").value + 
+        "<BR>Starting serum " + chemical + " concentration: " + C0 + " ng/mL <BR>" +
       "Water " + chemical + " concentration: " + Cw + " ppt <BR>" +
       "Serum " + chemical + " contribution from other ongoing exposures: " + Cother + " ng/mL <BR>" +
       "Volume of distribution: " + vol + " L/kg <BR>" +
